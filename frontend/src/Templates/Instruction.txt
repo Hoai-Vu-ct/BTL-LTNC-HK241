@@ -1,0 +1,3 @@
+***********Folder này là để anh em tạo template*********
+** Ví dụ: Header với footer nó hay lặp lại ở nhiều trang, thì anh em tạo HomeTemplate để chứa Header với Footer, Outlet là thằng con
+ => khi mà tới URL của component đó (trong hooks/useRouterCustome) thì nó tự có Header với Footer cho anh em luôn.
