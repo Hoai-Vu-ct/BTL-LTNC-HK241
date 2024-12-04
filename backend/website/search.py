@@ -74,14 +74,14 @@ def filter_data2(min_amount=None, max_amount=None, search_term=None):
         term_matches = None  # Start with no matches
 
         for word in words:
-            if inverted_index[word]:
-                word_matches = set(inverted_index[word])
+            if word in inverted_index:
+                word_matches = set(inverted_index[word])    
                 if term_matches is None:
                     term_matches = word_matches  # Initialize with first word's matches
                 else:
-                    term_matches &= word_matches 
+                    term_matches &= word_matches # AND
             else:
-                term_matches = set()  # If a word has no matched -> empty
+                term_matches = set()  # If a word has no matches, the result is empty (cuz AND)
                 break
 
         matching_indices &= term_matches
@@ -100,7 +100,7 @@ def filter_data2(min_amount=None, max_amount=None, search_term=None):
             (max_bucket_id is not None and bucket_id > max_bucket_id):
                 continue
 
-            # Perform binary search to find the range of relevant records
+            # Perform binary search to find the range of relevant data
             amounts = [record[0] for record in records]  # Transaction amount
             lower_idx = bisect_left(amounts, min_amount) if min_amount is not None else 0
             upper_idx = bisect_right(amounts, max_amount) if max_amount is not None else len(amounts)
