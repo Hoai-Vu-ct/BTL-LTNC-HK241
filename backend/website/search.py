@@ -1,6 +1,7 @@
 import csv
 import os
 from collections import defaultdict
+from bisect import bisect_left, bisect_right
 
 # Function to load and preprocess data
 def load_data(file_path):
@@ -45,7 +46,7 @@ def filter_data(min_amount=None, max_amount=None, search_term=None):
 
 # Build the inverted index + buckets
 #bucket_size = 1000      
-bucket_size = 2000
+bucket_size = 5000
 buckets = defaultdict(list)
 inverted_index = defaultdict(list)
 
@@ -56,21 +57,32 @@ for i, row in enumerate(bank_data):
         inverted_index[word].append(i)
     # Bucketing
     bucket_id = int(row['transaction_amount'] // bucket_size)
-    buckets[bucket_id].append(i)
-    
+    buckets[bucket_id].append((row['transaction_amount'], i))  # Store amount and index
+
+# Sort each bucket by transaction amount
+for bucket_id in buckets:
+    buckets[bucket_id].sort()
 
 # Search function
 def filter_data2(min_amount=None, max_amount=None, search_term=None):
     matching_indices = set(range(len(bank_data)))
     
-    # Handle matching indices for the search term 
+    # Handle matching indices for the search term   
     if search_term:
         search_term = search_term.lower()
-        term_matches = set()
-        
-        for word in inverted_index:
-            if search_term in word:
-                term_matches.update(inverted_index[word])
+        words = search_term.split()
+        term_matches = None  # Start with no matches
+
+        for word in words:
+            if inverted_index[word]:
+                word_matches = set(inverted_index[word])
+                if term_matches is None:
+                    term_matches = word_matches  # Initialize with first word's matches
+                else:
+                    term_matches &= word_matches 
+            else:
+                term_matches = set()  # If a word has no matched -> empty
+                break
 
         matching_indices &= term_matches
 
@@ -82,18 +94,19 @@ def filter_data2(min_amount=None, max_amount=None, search_term=None):
         min_bucket_id = int(min_amount // bucket_size) if min_amount is not None else None
         max_bucket_id = int(max_amount // bucket_size) if max_amount is not None else None
 
-        for bucket_id, indices in buckets.items():
+        for bucket_id, records in buckets.items():
             # Skip buckets outside the range
             if (min_bucket_id is not None and bucket_id < min_bucket_id) or \
             (max_bucket_id is not None and bucket_id > max_bucket_id):
                 continue
 
-            # Process buckest in range
-            for i in indices:
-                transaction_amount = bank_data[i]['transaction_amount']
-                if (min_amount is None or transaction_amount >= min_amount) and \
-                (max_amount is None or transaction_amount <= max_amount):
-                    amount_matches.add(i)
+            # Perform binary search to find the range of relevant records
+            amounts = [record[0] for record in records]  # Transaction amount
+            lower_idx = bisect_left(amounts, min_amount) if min_amount is not None else 0
+            upper_idx = bisect_right(amounts, max_amount) if max_amount is not None else len(amounts)
+
+            # Add the relevant indices to the matches
+            amount_matches.update(record[1] for record in records[lower_idx:upper_idx])     # i
         
         matching_indices &= amount_matches
 

@@ -1,19 +1,21 @@
 # python -m cProfile -s time test.py
+# filter_data:  3 runs = 0.427, 0.452, 0.430
+# filter_data2: 3 runs = 0.261, 0.250, 0.248
 import time
 
 from memory_profiler import memory_usage
 from search import filter_data, filter_data2
 
 
-# Test scenarios
+# Test cases
 test_cases = [
-    {"min_amount": 1000, "max_amount": 50000, "search_term": None},
-    {"min_amount": 3000, "max_amount": 4000, "search_term": None},
-    {"min_amount": None, "max_amount": None, "search_term": "Hoai"},
-    {"min_amount": 5000, "max_amount": 20000, "search_term": "Vu"},
+    {"min_amount": 10000, "max_amount": 500000, "search_term": None},
+    {"min_amount": 50000, "max_amount": 60000, "search_term": None},
+    {"min_amount": None, "max_amount": None, "search_term": "Hoai Vu"},
+    {"min_amount": 50000, "max_amount": 200000, "search_term": "Hoai Vu"},
 ]
 
-# Function to test performance
+# Test function
 def test_performance(test_case):
     start_time = time.perf_counter()  # Start time
     mem_usage = memory_usage((filter_data2, (), test_case), interval=0.1)  # Measure memory usage
