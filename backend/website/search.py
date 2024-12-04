@@ -71,8 +71,8 @@ def filter_data2(min_amount=None, max_amount=None, search_term=None):
     
     # Handle matching indices for the search term   
     if search_term:
-        search_term = search_term.lower()
-        words = search_term.split()
+        #words = search_term.lower().split()
+        words = re.findall(r'\b\w+\b', search_term.lower())     # Split by all special character (',' '.' ' ' ...)
         term_matches = None  # Start with no matches
 
         for word in words:
@@ -83,7 +83,7 @@ def filter_data2(min_amount=None, max_amount=None, search_term=None):
                 else:
                     term_matches &= word_matches # AND
             else:
-                term_matches = set()  # If a word has no matches, the result is empty (cuz AND)
+                term_matches = set()  # If a word has no matched, the result is empty (cuz AND)
                 break
 
         matching_indices &= term_matches
