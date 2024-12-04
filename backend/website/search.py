@@ -1,5 +1,6 @@
 import csv
 import os
+import re
 from collections import defaultdict
 from bisect import bisect_left, bisect_right
 
@@ -52,7 +53,8 @@ inverted_index = defaultdict(list)
 
 for i, row in enumerate(bank_data):
     # Inverted index
-    words = row['detail'].lower().split()
+    #words = row['detail'].lower().split()      # Split by spaces
+    words = re.findall(r'\b\w+\b', row['detail'].lower())   # Split by all special character (',' '.' ' ' ...)
     for word in words:
         inverted_index[word].append(i)
     # Bucketing
@@ -106,7 +108,7 @@ def filter_data2(min_amount=None, max_amount=None, search_term=None):
             upper_idx = bisect_right(amounts, max_amount) if max_amount is not None else len(amounts)
 
             # Add the relevant indices to the matches
-            amount_matches.update(record[1] for record in records[lower_idx:upper_idx])     # i
+            amount_matches.update(record[1] for record in records[lower_idx:upper_idx])     # index
         
         matching_indices &= amount_matches
 

@@ -5,12 +5,12 @@ const BankingStats = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">  
       <div className="bg-white rounded-lg shadow-md p-4">  
         <h2 className="text-lg font-bold mb-2">Tổng quan</h2>  
-        <p className="text-4xl font-bold mb-2">1.126.553.227.036 đ</p>  
+        <p className="text-4xl font-bold mb-2">135.080.894.728 đ</p>  
         <p className="text-gray-500">Tổng số tiền đông góp</p>  
       </div>  
       <div className="bg-white rounded-lg shadow-md p-4">  
         <h2 className="text-lg font-bold mb-2">Tổng số lượt đóng góp</h2>  
-        <p className="text-4xl font-bold mb-2">1.626.915</p>  
+        <p className="text-4xl font-bold mb-2">200.347</p>  
       </div>  
       <div className="col-span-1 md:col-span-2 bg-white rounded-lg shadow-md p-4">  
         <h2 className="text-lg font-bold mb-2">Phân bố số tiền đóng góp</h2>  
