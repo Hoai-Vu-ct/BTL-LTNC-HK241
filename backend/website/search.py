@@ -11,9 +11,9 @@ def load_data(file_path):
     with open(file_path, 'r', encoding='utf-8-sig') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            # Add a new 'transaction_amount' column as the max of 'credit' and 'debit' (since its one or the other)
             row['credit'] = float(row['credit']) if row['credit'] else 0
             row['debit'] = float(row['debit']) if row['debit'] else 0
+            # Add a new 'transaction_amount' column as the max of 'credit' and 'debit' (since its one or the other)
             row['transaction_amount'] = max(row['credit'], row['debit'])
             data.append(row)
     return data
