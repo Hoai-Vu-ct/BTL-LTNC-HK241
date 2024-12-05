@@ -17,7 +17,7 @@ const BankingStats = () => {
         <div className="grid grid-cols-5 gap-2">  
           <div className="col-span-5 md:col-span-1 flex items-center justify-center">  
             <div className="bg-blue-500 rounded-full w-6 h-6"></div>  
-            <span className="ml-2">34 lượt đóng góp</span>  
+            <span className="ml-2">34 lượt đóng góp (temp)</span>  
           </div>  
           {/* Add more bars for the different ranges */}  
         </div>  

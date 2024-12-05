@@ -59,11 +59,11 @@ for i, row in enumerate(bank_data):
         inverted_index[word].append(i)
     # Bucketing
     bucket_id = int(row['transaction_amount'] // bucket_size)
-    buckets[bucket_id].append((row['transaction_amount'], i))  # Store amount and index
+    buckets[bucket_id].append((row['transaction_amount'], i))  # Store t_amount and index
 
-# Sort each bucket by transaction amount
+# Sort buckets
 for bucket_id in buckets:
-    buckets[bucket_id].sort()
+    buckets[bucket_id].sort(key=lambda x: x[0])     # Sort by transaction_amounts
 
 # Search function
 def filter_data2(min_amount=None, max_amount=None, search_term=None):
@@ -92,20 +92,19 @@ def filter_data2(min_amount=None, max_amount=None, search_term=None):
     if min_amount is not None or max_amount is not None:
         amount_matches = set()
 
-        # Bucket ID range
+        # Bucket ID search range
         min_bucket_id = int(min_amount // bucket_size) if min_amount is not None else None
         max_bucket_id = int(max_amount // bucket_size) if max_amount is not None else None
 
         for bucket_id, records in buckets.items():
-            # Skip buckets outside the range
+            # Skip buckets outside the search range
             if (min_bucket_id is not None and bucket_id < min_bucket_id) or \
             (max_bucket_id is not None and bucket_id > max_bucket_id):
                 continue
 
             # Perform binary search to find the range of relevant data
-            amounts = [record[0] for record in records]  # Transaction amount
-            lower_idx = bisect_left(amounts, min_amount) if min_amount is not None else 0
-            upper_idx = bisect_right(amounts, max_amount) if max_amount is not None else len(amounts)
+            lower_idx = bisect_left(records,(min_amount, -float('inf'))) if min_amount is not None else 0
+            upper_idx = bisect_right(records, (max_amount, float('inf'))) if max_amount is not None else len(records)
 
             # Add the relevant indices to the matches
             amount_matches.update(record[1] for record in records[lower_idx:upper_idx])     # index

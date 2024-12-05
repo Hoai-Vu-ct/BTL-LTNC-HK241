@@ -1,6 +1,6 @@
 # python -m cProfile -s time test.py
 # filter_data:  3 runs = 0.427, 0.452, 0.430
-# filter_data2: 3 runs = 0.261, 0.250, 0.248
+# filter_data2: 3 runs = 0.198, 0.193, 0.228
 import time
 
 from memory_profiler import memory_usage
