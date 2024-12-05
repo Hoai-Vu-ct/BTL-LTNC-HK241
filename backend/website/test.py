@@ -12,7 +12,7 @@ test_cases = [
     {"min_amount": 10000, "max_amount": 500000, "search_term": None},
     {"min_amount": 50000, "max_amount": 60000, "search_term": None},
     {"min_amount": None, "max_amount": None, "search_term": "Hoai Vu"},
-    {"min_amount": 50000, "max_amount": 200000, "search_term": "Hoai Vu"},
+    {"min_amount": 100000, "max_amount": 400000, "search_term": "Hoai Vu"},
 ]
 
 # Test function

@@ -46,8 +46,8 @@ def filter_data(min_amount=None, max_amount=None, search_term=None):
 ###### Search using Inverted index + Buckets - should be faster but idk it's kinda negligible
 
 # Build the inverted index + buckets
-#bucket_size = 1000      
-bucket_size = 5000
+#bucket_size = 10000   
+bucket_size = 100000
 buckets = defaultdict(list)
 inverted_index = defaultdict(list)
 
